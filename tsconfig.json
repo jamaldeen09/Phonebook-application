@@ -6,6 +6,17 @@
 //   ],
 // }
 
+// {
+//   "compilerOptions": {
+//     "baseUrl": "./src",
+//     "paths": {
+//       "@components/*": ["component/*"],
+//       "@ui/*": ["component/ui/*"],
+//       "@/*": ["*"]
+//     }
+//   }
+// }
+
 {
   "compilerOptions": {
     "baseUrl": ".",
