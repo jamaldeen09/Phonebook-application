@@ -5,6 +5,11 @@ import firstnameSlice from "./AppSlices/Auth/firstname"
 import lastnameSlice from "./AppSlices/Auth/lastname"
 import emailSlice from "./AppSlices/Auth/email"
 import citySlice from "./AppSlices/Auth/city"
+import updModalSlice from "./UpdateItems/UpdateModalActivator"
+import storageSlice from "./UpdateItems/StoreFoundItem"
+import contactGetterSlice from "./ViewContact/contactinfogetter"
+import viewModalSlice from "./ViewContact/viewContactModalActivator"
+import phoneNumSlice from "./AppSlices/Auth/phonenumber"
 
 
 const store = configureStore({
@@ -16,6 +21,11 @@ const store = configureStore({
         lastName: lastnameSlice,
         useremail: emailSlice,
         usercity: citySlice,
+        updateModal: updModalSlice,
+        foundItemStorage: storageSlice,
+        currContact: contactGetterSlice,
+        viewContact: viewModalSlice,
+        Phonenumber: phoneNumSlice
     }
 })
 

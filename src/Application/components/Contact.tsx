@@ -1,5 +1,3 @@
-import { faEllipsis } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { Dropdown } from "./DropDown"
 
 
@@ -7,12 +5,15 @@ import { Dropdown } from "./DropDown"
 interface ContactSchema {
     fullName: string,
     email: string,
-    city: string
+    city: string,
+    firstLetter: string,
+    userId: number
 }
 
 const Contact = (props: ContactSchema) => {
-    const { fullName,email,city } = props
+    const { fullName,email,city,firstLetter,userId } = props
   return (
+    
     <div className="w-full min-h-16 flex  flex-col
     md:flex-row">
        <div className="w-full flex items-center space-x-2">
@@ -20,7 +21,7 @@ const Contact = (props: ContactSchema) => {
          <div style={{borderRadius: "50%"}} className="bg-blue-600 text-white font-bold flex
         justify-center items-center h-10 w-12">
             <p>
-
+                {firstLetter}
             </p>
         </div>
 
@@ -37,7 +38,7 @@ const Contact = (props: ContactSchema) => {
 
         {/* Editing Info */}
         <div className="w-fit px-4 flex justify-center items-center">
-            <Dropdown />
+            <Dropdown usersname={fullName} id={userId}/>
         </div>
     </div>
   )

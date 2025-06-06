@@ -8,10 +8,98 @@ import {
   } from "/Users/macbook/phonebook-app/src/components/ui/dropdown-menu";
 import { faEllipsis } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { Button } from "/Users/macbook/phonebook-app/src/components/ui/button";
+import { useAppDispatch,useAppSelector } from "/Users/macbook/phonebook-app/src/redux/hooks";
+import { getDataBase } from "/Users/macbook/phonebook-app/src/redux/AppSlices/contactStore";
+import { activateUpdModal } from "/Users/macbook/phonebook-app/src/redux/UpdateItems/UpdateModalActivator";
+import { getItem } from "/Users/macbook/phonebook-app/src/redux/UpdateItems/StoreFoundItem";
+import { activateContactViewer } from "/Users/macbook/phonebook-app/src/redux/ViewContact/viewContactModalActivator";
+import { clickedContact } from "/Users/macbook/phonebook-app/src/redux/ViewContact/contactinfogetter";
+
+interface DropdwonSchema {
+  usersname: string,
+  id:number;
+}
   
-  import { Button } from "/Users/macbook/phonebook-app/src/components/ui/button";
+  export function Dropdown(props: DropdwonSchema) {
+    const { usersname,id } = props
+      const dispatch = useAppDispatch()
+      const selector = useAppSelector(state => state)
+    // Delete Function
+    const DELETEreq = async () => {
+      try {
+        const response = await fetch(`http://localhost:4080/contact/${id}`, {
+          method: "DELETE"
+        });
+
+        const data = await response.json();
+        return data
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+    const GETnewDatabase = async () => {
+      try {
+        const res = await fetch("http://localhost:4080/contact", {
+            method: "GET",
+        })
+        const data = await res.json();
+          console.log(data)
+           dispatch(getDataBase(data.data));
+        } catch (err) {
+          console.error(err)
+        }
+    }
+
+    const handleDeleting = async () => {
+      await DELETEreq()
+      await GETnewDatabase()
+    }
+
+    // Update Function
   
-  export function Dropdown() {
+
+    const findUserGET = async () => {
+      try {
+        const response = await fetch(`http://localhost:4080/usercontact/${id}`, {
+          method: "GET"
+        })
+
+        const data = await response.json()
+        dispatch(getItem(data.contact))
+      } catch (err) {
+        console.error(err)
+      }
+    }
+   
+
+    const handleContactUpdate = async () => {
+      dispatch(activateUpdModal())
+
+      await findUserGET()
+    }
+
+    // Handle view contact
+    const clickedContactGET = async () => {
+      try {
+        const response = await fetch (`http://localhost:4080/usercontact/${id}`, {
+          method: "GET"
+        })
+        const data = await response.json();
+        dispatch(clickedContact(data.contact))
+      } catch (err) {
+        console.error(err)
+      }
+    }
+
+
+    const handleViewingContact = async () => {
+      dispatch(activateContactViewer())
+
+      await clickedContactGET()
+    }
+
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
@@ -22,16 +110,16 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56">
-          <DropdownMenuLabel>Options</DropdownMenuLabel>
+          <DropdownMenuLabel>{usersname}</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => alert("Profile clicked")}>
-            View Profile
+          <DropdownMenuItem onClick={handleViewingContact}>
+            View Contact
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => alert("Settings clicked")}>
+          <DropdownMenuItem onClick={handleContactUpdate}>
             Edit Contact
           </DropdownMenuItem>
           <DropdownMenuItem className="active:bg-red-600 active:text-white"
-          onClick={() => alert("Log out clicked")}>
+          onClick={handleDeleting}>
             Delete Contact
           </DropdownMenuItem>
         </DropdownMenuContent>

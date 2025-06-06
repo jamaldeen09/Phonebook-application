@@ -35,3 +35,11 @@ export const cityValidation = (city: string): boolean => {
         return true;
     }
 }
+
+export const phoneNumberVaidation = (number: string): boolean => {
+    if (!number || (number.length < 11 || number.length > 11)) {
+        return false
+    } else {
+        return true
+    }
+}

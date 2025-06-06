@@ -48,6 +48,18 @@ const contactSchema = {
             options: { min: 1 },
             errorMessage: "City must be at least 1 character"
         }
+    },
+    phonenumber: {
+        isString: {
+            errorMessage: "Phone Number must be A string"
+        },
+        isLength: {
+            options: {min: 11, max: 11},
+            errorMessage: "Invalid Phone Number"
+        },
+        notEmpty: {
+            errorMessage: "Phone Numer cannot be empty"
+        },
     }
 }
 

@@ -1,9 +1,9 @@
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPlus} from '@fortawesome/free-solid-svg-icons'
-import { Input } from "../components/ui/input";
 import { useLocation,useNavigate } from "react-router"
-import { useAppSelector } from '../redux/hooks';
+import { useAppSelector,useAppDispatch } from '../redux/hooks';
+import ContactListContact from "./ContactListContact";
+import { useEffect } from "react";
+import { getDataBase } from "/Users/macbook/phonebook-app/src/redux/AppSlices/contactStore";
 
 
 
@@ -13,9 +13,25 @@ const PhoneBook = () => {
     const navigate = useNavigate()
     const location = useLocation();
     const selector = useAppSelector(state => state)
+    const dispatch = useAppDispatch()
+    const information = selector.contactStorage.contactStore
 
     // extract url
     const url = selector.url.imgUrl;
+    const GETlatestData = async () => {
+            try {
+                const res = await fetch("http://localhost:4080/contact", {
+                    method: "GET",
+                })
+                const data = await res.json();
+                dispatch(getDataBase(data.data));
+            } catch (err) {
+                console.error(err)
+            }
+        }
+        useEffect(() => {
+            GETlatestData()
+        },[])
   return (
     <div className="flex justify-center items-center min-h-[150vh] bg-gray-400">
 
@@ -98,8 +114,18 @@ const PhoneBook = () => {
 
 
             {/* Display area */}
-            <div className="w-full min-h-full border-4 border-red-500">
-
+            <div className="w-full min-h-full py-10 px-6 flex flex-col gap-6">
+                 {
+                     information.map((info: any) => {
+                        return <ContactListContact
+                        phoneNum={info.phonenumber}
+                        key={info.id}
+                        userId={info.id}
+                        firstLetter={info.firstname.split("")[0]}
+                        email={info.email} city={info.city} 
+                        fullName={`${info.firstname} ${info.lastname}`}/>
+                    })
+                 }
             </div>
         </div>
     </div>
