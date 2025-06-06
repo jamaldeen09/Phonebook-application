@@ -120,18 +120,45 @@ const PhoneBook = () => {
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(itemGetter)
           });
-          const data = response.json();
+          const data = await response.json();
           console.log(data);
         } catch (err) {
           console.error(err)
         }
       }
 
+      const [ updValidation,setUpdValidation ] = useState<boolean>(false)
     const updateContact = async () => {
-        await updateUserPUT();
-        await GETlatestData();
+        const isValidFirstname = firstnameValidation(itemGetter.firstname)
+        const isValidLastname = lastnameValidation(itemGetter.lastname)
+        const isValidEmail = emailValidation(itemGetter.email)
+        const isValidCity = cityValidation(itemGetter.city)
+        const isValidPhoneNumber = phoneNumberVaidation(itemGetter.phonenumber)
+       
+        if (isValidFirstname && isValidLastname && isValidEmail && isValidCity && isValidPhoneNumber){
+            try {
+                const response = await fetch (`http://localhost:4080/contact/${itemGetter.id}`, {
+                  method: "PUT",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(itemGetter)
+                });
+                const data = await response.json();
+                console.log(data);
 
-        dispatch(deactivateUpdModal());
+                if (!data?.updatedItem) {
+                    setUpdValidation(true)
+                    return;
+                } else {
+                    setUpdValidation(false)
+                }
+              } catch (err) {
+                console.error(err)
+              }
+            await GETlatestData();
+            dispatch(deactivateUpdModal())
+        } else {
+            return;
+        }
     }
     // View contact
     const storingUserInfo = selector.currContact.currentContact;
@@ -356,7 +383,7 @@ const PhoneBook = () => {
                     ">
                         <Input value={firstname} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(setFirstname(e.target.value))}
                         type="text" placeholder="Firstname" className="bg-white w-full h-12"/>
-                        <p className="text-red-600">{firstnameValidation(firstname) ? null : validation ? "Invalid firstname" : "Invalid firstname"}</p>
+                        <p className="text-red-600">{firstnameValidation(firstname) ? null : validation ? "Invalid firstname ": "Invalid firstname"}</p>
                     </div>
 
                     {/* Lastname area */}
@@ -436,28 +463,32 @@ const PhoneBook = () => {
                     {/* Modal Body */}
 
                     {/* New firstName */}
-                    <div className="w-full">
+                    <div className="w-full max-w-sm flex justify-center items-center flex-col gap-2">
                         <Input value={itemGetter.firstname} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(changeFirstName(e.target.value))}
                         type="text" placeholder="New Firstname" className="bg-white w-full h-12"/>
+                          <p className="text-red-600">{firstnameValidation(itemGetter.firstname) ? null : updValidation ? "Invalid Email ": "Invalid Email"}</p>
                     </div>
 
                     {/* New lastName */}
 
-                    <div className="w-full">
+                    <div className="w-full max-w-sm flex justify-center items-center flex-col gap-2">
                         <Input value={itemGetter.lastname} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(changeLastName(e.target.value))}
                         type="text" placeholder="New Lastname" className="bg-white w-full h-12"/>
+                        <p className="text-red-600">{lastnameValidation(itemGetter.lastname) ? null : updValidation ? "Invalid Lastname" : "Invalid Lastname"}</p>
                     </div>
 
                     {/* New Email */}
-                    <div className="w-full">
+                    <div className="w-full max-w-sm flex justify-center items-center flex-col gap-2">
                         <Input value={itemGetter.email} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(changeEmail(e.target.value))}
                         type="text" placeholder="New Email" className="bg-white w-full h-12"/>
+                         <p className="text-red-600">{emailValidation(itemGetter.email) ? null : updValidation ? "Invalid Email Address" : "Invalid Email Address"}</p>
                     </div>
 
                     {/* New City */}
-                    <div className="w-full">
+                    <div className="w-full max-w-sm flex justify-center items-center flex-col gap-2">
                         <Input value={itemGetter.city} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(changeCity(e.target.value))}
                         type="text" placeholder="New City" className="bg-white w-full h-12"/>
+                        <p className="text-red-600">{cityValidation(itemGetter.city) ? null : updValidation ? "Invalid City" : "Invalid City"}</p>
                     </div>
 
                     {/* New Number */}
@@ -468,6 +499,8 @@ const PhoneBook = () => {
                         onChange={(e: React.ChangeEvent<HTMLInputElement> | any) => dispatch(changePhoneNumber(e.target.value))}
 
                         type="number" placeholder="Phonenumber" className="bg-white w-full h-12"/>
+                        <p className="text-red-600">{
+                        phoneNumberVaidation(itemGetter.phonenumber) ? null : validation ? "Invalid Phone number" : "Invalid Phone number"}</p>
                     </div>
 
                     <div className="w-full">
