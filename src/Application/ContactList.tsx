@@ -114,7 +114,10 @@ const PhoneBook = () => {
 
 
             {/* Display area */}
-            <div className="w-full min-h-full py-10 px-6 flex flex-col gap-6">
+            <div 
+            style={{overflow: "scroll-auto"}}
+            className="w-full max-h-[800px] overflow-y-auto flex flex-col gap-40 px-4
+            py-20">
                  {
                      information.map((info: any) => {
                         return <ContactListContact

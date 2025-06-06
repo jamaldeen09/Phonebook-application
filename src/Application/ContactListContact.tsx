@@ -27,7 +27,7 @@ const ContactListContact = (props: ContactSchema) => {
             <div className="w-full flex flex-col space-y-2">
                 <p className="font-extrabold">{fullName}</p>
     
-                <div className="flex space-x-4 items-center">
+                <div className="flex space-y-4 items-start flex-col">
                     <div className="rounded-full darkishWhite text-xs py-1 px-2">{email}</div>
                     <div className="rounded-full darkishWhite text-xs py-1 px-2">{city}</div>
                     <div className="rounded-full darkishWhite text-xs py-1 px-2">{phoneNum}</div>

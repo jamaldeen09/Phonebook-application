@@ -15,9 +15,12 @@ const phoneNumSlice = createSlice({
     reducers: {
         setPhoneNum: (state, action: PayloadAction) => {
             state.phoneNum = action.payload
+        },
+        resetPhoneNum: (state, action: PayloadAction) => {
+            state.phoneNum = ""
         }
     }
 }) 
 
-export const { setPhoneNum } = phoneNumSlice.actions
+export const { setPhoneNum,resetPhoneNum } = phoneNumSlice.actions
 export default phoneNumSlice.reducer;

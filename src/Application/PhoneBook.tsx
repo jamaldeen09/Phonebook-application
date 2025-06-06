@@ -16,7 +16,7 @@ import { deactivateUpdModal } from '/Users/macbook/phonebook-app/src/redux/Updat
 import { changeCity, changeEmail, changeFirstName, changeLastName, changePhoneNumber } from '/Users/macbook/phonebook-app/src/redux/UpdateItems/StoreFoundItem';
 import { deactivateContactViewer } from '/Users/macbook/phonebook-app/src/redux/ViewContact/viewContactModalActivator';
 import ContactView from './components/ContactView';
-import { setPhoneNum } from '/Users/macbook/phonebook-app/src/redux/AppSlices/Auth/phonenumber';
+import { resetPhoneNum, setPhoneNum } from '/Users/macbook/phonebook-app/src/redux/AppSlices/Auth/phonenumber';
 
 
 const PhoneBook = () => {
@@ -50,6 +50,7 @@ const PhoneBook = () => {
         dispatch(resetLastname())
         dispatch(resetEmail())
         dispatch(resetCity())
+        dispatch(resetPhoneNum())
 
         setUserAdder(false)
     }
@@ -396,9 +397,9 @@ const PhoneBook = () => {
                         value={phonenumber} 
                         onChange={(e: React.ChangeEvent<HTMLInputElement> | any) => dispatch(setPhoneNum(e.target.value))}
 
-                        type="number" placeholder="Phonenumber" className="bg-white w-full h-12"/>
+                        type="number" placeholder="Phone number" className="bg-white w-full h-12"/>
                         <p className="text-red-600">{
-                        phoneNumberVaidation(phonenumber) ? null : validation ? "Invalid Phonenumber" : "Invalid Phonenumber"}</p>
+                        phoneNumberVaidation(phonenumber) ? null : validation ? "Invalid Phonenumber" : "Invalid Phone number"}</p>
                     </div>
 
                     {/* submit btn */}
@@ -510,7 +511,7 @@ const PhoneBook = () => {
                         <h1 className="text-xl font-extrabold text-white">Name: {`${storingUserInfo.firstname} ${storingUserInfo.lastname}`}</h1>
                         <p className="text-lg text-white">Email: {storingUserInfo.email}</p>
                         <p className="text-lg text-white">City: {storingUserInfo.city}</p>
-                        <p className="text-lg text-white">Phonenumber: {storingUserInfo.phonenumber}</p>
+                        <p className="text-lg text-white">Phone number: {storingUserInfo.phonenumber}</p>
                     </div>
                 </div>
             </div>
