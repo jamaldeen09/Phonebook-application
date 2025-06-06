@@ -172,12 +172,12 @@ const PhoneBook = () => {
 
     const fetchSearchData = async () => {
         try {
-            const response = await fetch (`http://localhost:4080/filter-contact/${search}`, {
+            const response = await fetch (`http://localhost:4080/filter-contact?filter=${search}`, {
                 method: "GET"
             })
 
             const data = await response.json()
-            setFoundItem(data.item)
+            setFoundItem(data.filtered)
         } catch (err) {
             console.error(err)
         }
@@ -323,12 +323,13 @@ const PhoneBook = () => {
             py-10">
 
                 {
-                    foundItem ? <Contact 
-                     fullName={`${foundItem.firstname} ${foundItem.lastname}`}
-                     email={foundItem.email} city={foundItem.city}
-                     firstLetter={foundItem.firstname.split("")[0]}
-                     key={foundItem.id} userId={foundItem.id}
-                     /> :
+                    foundItem ? foundItem.map((item: any) => {
+                        return  <Contact 
+                        fullName={`${item.firstname} ${item.lastname}`}
+                        email={item.email} city={item.city}
+                        firstLetter={item.firstname.split("")[0]}
+                        key={item.id} userId={item.id} />
+                    }) :
 
                     information.map((info: any) => {
                         return <Contact 

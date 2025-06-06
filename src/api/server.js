@@ -1,5 +1,5 @@
 import express from "express"
-import { checkSchema,matchedData,validationResult,param,body } from "express-validator"
+import { checkSchema,matchedData,validationResult,param,body, query } from "express-validator"
 import cors from "cors"
 import contactSchema from "./schemas.js"
 import database from "./database.js"
@@ -62,7 +62,7 @@ app.post("/contact", checkSchema(contactSchema) ,(request, response) => {
     )
 })
 
-app.get("/filter-contact/:name", param("name").isString(), (request, response) => {
+app.get("/filter-contact", query("filter").isString(), (request, response) => {
     const result = validationResult(request)
     const isValid = result.isEmpty();
 
@@ -70,16 +70,16 @@ app.get("/filter-contact/:name", param("name").isString(), (request, response) =
         return response.status(400).send(result.array())
 
     const data = matchedData(request)
-    const extractedName = data.name;
+    const letter = data.filter;
 
-    const foundItem = database.find(item => item.firstname.toLowerCase().includes(extractedName.toLowerCase()))
+    const newItems = database.filter(item => item.firstname.toLowerCase().includes(letter.toLowerCase()))
 
-    if (!foundItem) {
-        return response.status(404).send({msg: "Item does not exist and was not found"})
+    if (newItems.length <= 0) {
+        return response.status(400).send({msg: "Item does not exist"})
     } else {
         return response.status(200).send({
-            msg: "Item Found",
-            item: foundItem
+            msg: "Filtered",
+            filtered: newItems
         })
     }
 })
