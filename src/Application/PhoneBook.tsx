@@ -150,6 +150,7 @@ const PhoneBook = () => {
                     return;
                 } else {
                     setUpdValidation(false)
+                    await fetchSearchData();
                 }
               } catch (err) {
                 console.error(err)
@@ -466,7 +467,7 @@ const PhoneBook = () => {
                     <div className="w-full max-w-sm flex justify-center items-center flex-col gap-2">
                         <Input value={itemGetter.firstname} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(changeFirstName(e.target.value))}
                         type="text" placeholder="New Firstname" className="bg-white w-full h-12"/>
-                          <p className="text-red-600">{firstnameValidation(itemGetter.firstname) ? null : updValidation ? "Invalid Email ": "Invalid Email"}</p>
+                          <p className="text-red-600">{firstnameValidation(itemGetter ? itemGetter.firstname : "") ? null : updValidation ? "Invalid Firstname ": "Invalid Firstname"}</p>
                     </div>
 
                     {/* New lastName */}
@@ -474,21 +475,21 @@ const PhoneBook = () => {
                     <div className="w-full max-w-sm flex justify-center items-center flex-col gap-2">
                         <Input value={itemGetter.lastname} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(changeLastName(e.target.value))}
                         type="text" placeholder="New Lastname" className="bg-white w-full h-12"/>
-                        <p className="text-red-600">{lastnameValidation(itemGetter.lastname) ? null : updValidation ? "Invalid Lastname" : "Invalid Lastname"}</p>
+                        <p className="text-red-600">{lastnameValidation(itemGetter ? itemGetter.lastname : "") ? null : updValidation ? "Invalid Lastname" : "Invalid Lastname"}</p>
                     </div>
 
                     {/* New Email */}
                     <div className="w-full max-w-sm flex justify-center items-center flex-col gap-2">
                         <Input value={itemGetter.email} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(changeEmail(e.target.value))}
                         type="text" placeholder="New Email" className="bg-white w-full h-12"/>
-                         <p className="text-red-600">{emailValidation(itemGetter.email) ? null : updValidation ? "Invalid Email Address" : "Invalid Email Address"}</p>
+                         <p className="text-red-600">{emailValidation(itemGetter ? itemGetter.email : "") ? null : updValidation ? "Invalid Email Address" : "Invalid Email Address"}</p>
                     </div>
 
                     {/* New City */}
                     <div className="w-full max-w-sm flex justify-center items-center flex-col gap-2">
                         <Input value={itemGetter.city} onChange={(e: React.ChangeEvent<HTMLInputElement>| any) => dispatch(changeCity(e.target.value))}
                         type="text" placeholder="New City" className="bg-white w-full h-12"/>
-                        <p className="text-red-600">{cityValidation(itemGetter.city) ? null : updValidation ? "Invalid City" : "Invalid City"}</p>
+                        <p className="text-red-600">{cityValidation(itemGetter ? itemGetter.city : "") ? null : updValidation ? "Invalid City" : "Invalid City"}</p>
                     </div>
 
                     {/* New Number */}
@@ -523,7 +524,7 @@ const PhoneBook = () => {
                  md:max-w-[440px] flex flex-col gap-16 px-10 py-16`}>
 
                     <div className="w-full flex justify-between items-center">
-                        <h1 className="text-white font-bold text-xl">{`${storingUserInfo.firstname}'s Information`}</h1>
+                        <h1 className="text-white font-bold text-xl">{`${storingUserInfo ? storingUserInfo.firstname : ""}'s Information`}</h1>
 
                         <FontAwesomeIcon 
                         onClick={() => dispatch(deactivateContactViewer())}

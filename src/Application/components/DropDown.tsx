@@ -24,7 +24,6 @@ interface DropdwonSchema {
   export function Dropdown(props: DropdwonSchema) {
     const { usersname,id } = props
       const dispatch = useAppDispatch()
-      const selector = useAppSelector(state => state)
     // Delete Function
     const DELETEreq = async () => {
       try {
