@@ -44,6 +44,8 @@ const PhoneBook = () => {
     const city = selector.usercity.city
     const phonenumber = selector.Phonenumber.phoneNum
 
+   
+
     // cancel request
     const cancelReq = () => {
         dispatch(resetFirstname())
@@ -73,6 +75,10 @@ const PhoneBook = () => {
     // validation
     const [ validation,setValidation ] = useState<boolean>(false)
     const information = selector.contactStorage.contactStore
+
+    const [ search,setSearch ] = useState<string>("");
+    const filteredContacts = information.filter((item: any) => item.firstname.toLowerCase().includes(search))
+
     const createUser = async () => {
         // Frontend Validation
         const isValidFirstname = firstnameValidation(firstname)
@@ -113,21 +119,8 @@ const PhoneBook = () => {
     // Update Modal activator
     const activateModal = selector.updateModal.updModal
     const itemGetter = selector.foundItemStorage.storage
-    const updateUserPUT = async () => {
-        try {
-          const response = await fetch (`http://localhost:4080/contact/${itemGetter.id}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(itemGetter)
-          });
-          const data = await response.json();
-          console.log(data);
-        } catch (err) {
-          console.error(err)
-        }
-      }
 
-      const [ updValidation,setUpdValidation ] = useState<boolean>(false)
+    const [ updValidation,setUpdValidation ] = useState<boolean>(false)
     const updateContact = async () => {
         const isValidFirstname = firstnameValidation(itemGetter.firstname)
         const isValidLastname = lastnameValidation(itemGetter.lastname)
@@ -150,7 +143,6 @@ const PhoneBook = () => {
                     return;
                 } else {
                     setUpdValidation(false)
-                    await fetchSearchData();
                 }
               } catch (err) {
                 console.error(err)
@@ -165,30 +157,9 @@ const PhoneBook = () => {
     const storingUserInfo = selector.currContact.currentContact;
     const viewContact = selector.viewContact.viewModal
 
+    
+
     // Search Bar
-    const [ search,setSearch ] = useState<string>("");
-    const [ foundItem,setFoundItem ] = useState<any>(null);
-
-
-    const fetchSearchData = async () => {
-        try {
-            const response = await fetch (`http://localhost:4080/filter-contact?filter=${search}`, {
-                method: "GET"
-            })
-
-            const data = await response.json()
-            setFoundItem(data.filtered)
-        } catch (err) {
-            console.error(err)
-        }
-    }
-    useEffect(() => {
-        if (search.trim()) {
-          fetchSearchData();
-        } else {
-          setFoundItem(null);
-        }
-      }, [search]);
 
   
   return (
@@ -323,13 +294,13 @@ const PhoneBook = () => {
             py-10">
 
                 {
-                    foundItem ? foundItem.map((item: any) => {
-                        return  <Contact 
+                    filteredContacts ? filteredContacts.map((item: any)=>{ 
+                        return <Contact 
                         fullName={`${item.firstname} ${item.lastname}`}
                         email={item.email} city={item.city}
                         firstLetter={item.firstname.split("")[0]}
-                        key={item.id} userId={item.id} />
-                    }) :
+                        key={item.id} userId={item.id} /> })
+                     :
 
                     information.map((info: any) => {
                         return <Contact 

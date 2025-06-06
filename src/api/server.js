@@ -62,27 +62,6 @@ app.post("/contact", checkSchema(contactSchema) ,(request, response) => {
     )
 })
 
-app.get("/filter-contact", query("filter").isString(), (request, response) => {
-    const result = validationResult(request)
-    const isValid = result.isEmpty();
-
-    if (!isValid)
-        return response.status(400).send(result.array())
-
-    const data = matchedData(request)
-    const letter = data.filter;
-
-    const newItems = database.filter(item => item.firstname.toLowerCase().includes(letter.toLowerCase()))
-
-    if (newItems.length <= 0) {
-        return response.status(400).send({msg: "Item does not exist"})
-    } else {
-        return response.status(200).send({
-            msg: "Filtered",
-            filtered: newItems
-        })
-    }
-})
 
 app.put("/contact/:id", checkSchema(contactSchema), param("id").notEmpty() , (request, response) => {
     const result = validationResult(request);
